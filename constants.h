@@ -1,0 +1,8 @@
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
+
+#define LENGTH_HEAD 40
+#define LONGUEUR_FENETRE 600
+#define LARGEUR_FENETRE 600
+
+#endif // CONSTANTS_H

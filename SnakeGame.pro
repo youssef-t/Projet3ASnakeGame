@@ -23,6 +23,7 @@ SOURCES += \
     snakehead.cpp
 
 HEADERS += \
+    constants.h \
     fruit.h \
     game.h \
     snakebody.h \
