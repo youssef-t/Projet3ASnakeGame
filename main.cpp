@@ -4,12 +4,17 @@
 #include "snakeBody.h"
 #include "snakeHead.h"
 
+//variables globales
+Game* game;
+Fruit* fruit;
+
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    Game game;
-    game.show();
-    game.start();
+    game = new Game();
+    game->show();
+    game->start();
 
     return a.exec();
 }
