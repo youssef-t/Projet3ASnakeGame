@@ -13,12 +13,13 @@ Fruit::Fruit()
     setPos(120,120);
     game->getScene()->addItem(this);
 
-    score = 1;
+    m_score = 1;
 }
-
+/*
 int Fruit::getX(){
     return this->getX();
 }
 int Fruit::getY(){
     return this->getY();
 }
+*/

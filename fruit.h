@@ -7,10 +7,10 @@ class Fruit: public QGraphicsEllipseItem
 public:
     Fruit();
     //retourner les coordonnées du fruit
-    int getX();
-    int getY();
+   // int getX();
+   //int getY();
 private:
-       int score;
+       int m_score;
 };
 
 

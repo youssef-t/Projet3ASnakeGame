@@ -22,8 +22,8 @@ void Game::start(){
     m_scene->addItem(fruit);
 
     // elongate if collides with Fruit
-      //  if (snake_head->getX() == fruit->getX() && snake_head->getY() == fruit->getY()){
-        //    snake_head->elongateBody();
+      // if (snake_head->getX() == fruit->getX() && snake_head->getY() == fruit->getY()){
+        //  snake_head->elongateBody();
         //}
 
 
