@@ -19,6 +19,7 @@ SOURCES += \
     fruit.cpp \
     game.cpp \
     main.cpp \
+    score.cpp \
     snakebody.cpp \
     snakehead.cpp
 
@@ -26,6 +27,7 @@ HEADERS += \
     constants.h \
     fruit.h \
     game.h \
+    score.h \
     snakebody.h \
     snakehead.h
 

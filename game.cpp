@@ -9,6 +9,7 @@ Game::Game()
 
     m_scene = new QGraphicsScene(0,0,LONGUEUR_FENETRE,LARGEUR_FENETRE);
     setScene(m_scene);
+    m_score = 0;
 }
 
 void Game::start(){
@@ -19,7 +20,7 @@ void Game::start(){
 
     //snake_head->setFocus();
     Fruit* fruit = new Fruit();
-    m_scene->addItem(fruit);
+    //m_scene->addItem(fruit);
 
     // elongate if collides with Fruit
       // if (snake_head->getX() == fruit->getX() && snake_head->getY() == fruit->getY()){

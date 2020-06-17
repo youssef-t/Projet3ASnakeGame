@@ -18,13 +18,16 @@ public:
     //méthode pour controler la tête
     void keyPressEvent(QKeyEvent* event);
     //bouger les blocs qui composent le corps
-    void moveBody();
+    void moveBody(bool collision_detected = false);
     //augmenter la taille du serpent
     void elongateBody();
 
     //retourner les coordonnées de la tête
     int getX();
     int getY();
+
+    //détection de collision
+    bool collideFruit();
 
 public slots:
     void move();

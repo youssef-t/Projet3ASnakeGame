@@ -6,8 +6,6 @@
 
 //variables globales
 Game* game;
-Fruit* fruit;
-
 
 int main(int argc, char *argv[])
 {

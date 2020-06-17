@@ -11,4 +11,5 @@ public:
     void gameOver();
 private:
     QGraphicsScene* m_scene;
+    int m_score;
 };

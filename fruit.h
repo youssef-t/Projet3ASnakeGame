@@ -9,8 +9,8 @@ public:
     //retourner les coordonnées du fruit
    // int getX();
    //int getY();
-private:
-       int m_score;
+//private:
+  //     int m_score;
 };
 
 
