@@ -28,6 +28,7 @@ public:
 
     //détection de collision
     bool collideFruit();
+    bool collisionImplement(int cycle);
 
 public slots:
     void move();

@@ -8,6 +8,10 @@ Game::Game()
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     m_scene = new QGraphicsScene(0,0,LONGUEUR_FENETRE,LARGEUR_FENETRE);
+    QBrush brush;
+    brush.setStyle(Qt::SolidPattern);
+    brush.setColor(QColor::fromRgb(249, 204, 23));
+    m_scene->setBackgroundBrush(brush);
     setScene(m_scene);
     m_score = 0;
 }

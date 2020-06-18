@@ -27,7 +27,7 @@ SnakeHead::SnakeHead()
     SnakeBody* bloc1 = new SnakeBody();
     bloc1->setPos(POS_INIT_TETE_X - LONGUEUR_TETE, POS_INIT_TETE_Y);
     game->getScene()->addItem(bloc1);
-    m_snake_body.prepend(bloc1);
+    m_snake_body.push_back(bloc1);
     /*SnakeBody* bloc2 = new SnakeBody();
     bloc2->setPos(POS_INIT_TETE_X - 2*LONGUEUR_TETE, POS_INIT_TETE_Y);
     game->getScene()->addItem(bloc2);
@@ -46,18 +46,24 @@ SnakeHead::SnakeHead()
 
 }
 
-//variable globale pour aider à afficher le fruit après 5 périodes
+//variable globale pour aider à afficher le fruit après X périodes
 //de sa déstruction
 int aide_affichage_fruit = 0;
 void SnakeHead::keyPressEvent(QKeyEvent *event)
 {
-    if(verify_position()){
+    //Afin de corriger un bug où le fruit ne disparaît pas lorsqu'on
+    //appuie sur une touche juste avant de manger le fruit
+    //On teste alors s'il y a eu de collision au moment où on appuie
+    //sur une touche
+    bool aide_detection_collision = false;
+    if(verify_position() && m_direction != "NULL"){
+        m_prev_pos = pos();
         if(event->key() == Qt::Key_Right){
             if(m_direction != "LEFT"){
                 if(m_direction != "RIGHT"){
-                    m_prev_pos = pos();
                     setPos(x() + LONGUEUR_TETE, y());
-                    moveBody();
+                    aide_detection_collision = collisionImplement(CYCLE_FRUIT);
+                    moveBody(aide_detection_collision);
                     m_direction = "RIGHT";
                     }
                 }
@@ -66,9 +72,9 @@ void SnakeHead::keyPressEvent(QKeyEvent *event)
         else if(event->key() == Qt::Key_Left){
                 if(m_direction != "RIGHT"){
                     if(m_direction != "LEFT"){
-                        m_prev_pos = pos();
                         setPos(x() - LONGUEUR_TETE, y());
-                        moveBody();
+                        aide_detection_collision = collisionImplement(CYCLE_FRUIT);
+                        moveBody(aide_detection_collision);
                         m_direction = "LEFT";
                     }
             }
@@ -76,9 +82,9 @@ void SnakeHead::keyPressEvent(QKeyEvent *event)
         else if(event->key() == Qt::Key_Up){
                 if(m_direction != "DOWN"){
                     if(m_direction != "UP"){
-                        m_prev_pos = pos();
                         setPos(x(), y() - LONGUEUR_TETE);
-                        moveBody();
+                        aide_detection_collision = collisionImplement(CYCLE_FRUIT);
+                        moveBody(aide_detection_collision);
                         m_direction = "UP";
                     }
                 }
@@ -86,27 +92,15 @@ void SnakeHead::keyPressEvent(QKeyEvent *event)
         else if(event->key() == Qt::Key_Down){
                 if(m_direction != "UP"){
                    if(m_direction != "DOWN"){
-                        m_prev_pos = pos();
                         setPos(x(), y() + LONGUEUR_TETE);
-                        moveBody();
+                        aide_detection_collision = collisionImplement(CYCLE_FRUIT);
+                        moveBody(aide_detection_collision);
                         m_direction = "DOWN";
                     }
                   }
             }
-        //Afin de corriger un bug où le fruit ne disparaît pas lorsqu'on
-        //appuie sur une touche juste avant de manger le fruit
-        if(collideFruit()){
-            //initialiser la variable aide_affichage_fruit pour afficher le fruit
-            aide_affichage_fruit = 1;
-        }
-        //incrémenter la valeur de la variable
-        if(aide_affichage_fruit >0)
-            aide_affichage_fruit ++;
-        //afficher un nouveau fruit après 7 périodes
-        if(aide_affichage_fruit == 8){
-            Fruit* fruit = new Fruit();
-            aide_affichage_fruit = 0;
-        }
+
+
     }
     //faire une pause
     if(event->key() == Qt::Key_Space){
@@ -120,51 +114,29 @@ void SnakeHead::keyPressEvent(QKeyEvent *event)
         }
     }
 
-
 }
 
 void SnakeHead::moveBody(bool collision_detected){
     int n = m_snake_body.size();
     // faire bouger chaque bloc à l'ancien emplacement du bloc qui le suit
-    m_snake_body.first()->setPos(m_prev_pos);
     if(collision_detected){
         SnakeBody* snake_body = new SnakeBody();
-        m_snake_body.append(snake_body);
+        m_snake_body.push_back(snake_body);
         qDebug() <<"new Snake_body created, taille m_snake.body.size : " << m_snake_body.size();
     }
    //bouger le corps du serpent
+   //de la dernière partie jusqu'à la première
     for (int i = m_snake_body.size()-1; i > 0; i--){
         m_snake_body.at(i)->setPos(m_snake_body[i-1]->pos());
     }
+    //la partie du corps 0 a la position précédente de la tête
+    m_snake_body.at(0)->setPos(m_prev_pos);
     //ajouter le dernier morceau à la scène s'il y a eu une collision
     if(collision_detected)
         game->getScene()->addItem(m_snake_body.at(n));
 
-    /* QPointF prev_pos;
-     prev_pos = m_snake_body.first()->pos();
-     m_snake_body.first()->setPos(m_prev_pos);
-     m_prev_pos = prev_pos;
-     //m_prev_pos = m_snake_body.first()->pos();
-     for (auto i = 0; i < n -1; i++){
-         prev_pos = m_snake_body.first
-         m_snake_body[i+1]->setPos();
-         m_snake_body[i]->pos(m_prev_pos);
-     }
- */
 
 }
-/*
-void SnakeHead::elongateBody()
-{
-    //ajouter un nouveau bloc
-    SnakeBody* bloc = new SnakeBody();
-    m_snake_body.prepend(bloc);
-
-    // Ajouter le bloc à la scène
-    //if (m_direction == "")
-    bloc->setPos(200,200);
-    game->getScene()->addItem(bloc);
-}*/
 
 int SnakeHead::getX(){
     return this->x();
@@ -176,6 +148,7 @@ int SnakeHead::getY(){
 
 bool SnakeHead::collideFruit(){
    QList<QGraphicsItem*> colliding_items = collidingItems();
+   bool collision_detected = false;
    for(int i =0; i <colliding_items.size() ; i++){
     if(typeid(*(colliding_items.at(i))) == typeid(Fruit) ){
         //supprimer le fruit
@@ -183,13 +156,31 @@ bool SnakeHead::collideFruit(){
 
         //supprimer le fruit de la mémoire
         delete colliding_items.at(i);
-        return true;
+        qDebug() << "collideFruit";
+        collision_detected = true;
+        break;
         }
     }
    //s'il n'y a pas eu de collisions
-   return false;
+   return collision_detected;
 }
-
+//afficher le fruit après "cycle" périodes
+bool SnakeHead::collisionImplement(int cycle){
+    bool collision_detected_local = collideFruit();
+    if(collision_detected_local){
+        //initialiser la variable aide_affichage_fruit pour afficher le fruit
+        aide_affichage_fruit = 1;
+    }
+    //incrémenter la valeur de la variable
+    if(aide_affichage_fruit >0)
+        aide_affichage_fruit ++;
+    //afficher un nouveau fruit après "cycle" périodes
+    if(aide_affichage_fruit == cycle){
+        Fruit* fruit = new Fruit();
+        aide_affichage_fruit = 0;
+    }
+    return collision_detected_local;
+}
 
 //mouvement automatique
 void SnakeHead::move(){
@@ -208,7 +199,7 @@ void SnakeHead::move(){
         else if(m_direction == "DOWN")
             setY(this->y() + LONGUEUR_TETE);
 
-        if(collideFruit()){
+        /*if(collideFruit()){
             //initialiser la variable aide_affichage_fruit pour afficher le fruit
             qDebug()<<"Collision détectée";
             collision_detected = true;
@@ -222,8 +213,10 @@ void SnakeHead::move(){
         if(aide_affichage_fruit == 8){
             Fruit* fruit = new Fruit();
             aide_affichage_fruit = 0;
-        }
+        }*/
+        collision_detected = collisionImplement(CYCLE_FRUIT);
         moveBody(collision_detected);
+        collision_detected = false;
     }
 }
 
