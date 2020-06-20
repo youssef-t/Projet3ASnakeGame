@@ -6,7 +6,9 @@ Fonctionnalités réalisées:
      - Détection de collision de la tête du serpent avec le fruit
      - Correction de bugs liés au mouvement du serpent
      - Affichage du score
-
-Fonctionnalités manquantes:
      - Game over : il n'y a pas de détection de collision pour la tête du serpent avec son corps
      - Un menu
+
+
+Fonctionnalités manquantes:
+    
