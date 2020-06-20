@@ -13,7 +13,8 @@ Game::Game()
     brush.setColor(QColor::fromRgb(249, 204, 23));
     m_scene->setBackgroundBrush(brush);
     setScene(m_scene);
-    m_score = 0;
+    score = new Score();
+    m_scene->addItem(score);
 }
 
 void Game::start(){
@@ -21,6 +22,8 @@ void Game::start(){
     //Lors de l'appel du constructeur
     //l'objet est mis sur la "scène"
     SnakeHead *snake_head = new SnakeHead();
+    score->setVisible(true);
+    score->setScore(0);
 
     //snake_head->setFocus();
     Fruit* fruit = new Fruit();

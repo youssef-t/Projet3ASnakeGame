@@ -153,6 +153,7 @@ bool SnakeHead::collideFruit(){
     if(typeid(*(colliding_items.at(i))) == typeid(Fruit) ){
         //supprimer le fruit
         game->getScene()->removeItem(colliding_items.at(i));
+        game->score->setScore(game->score->getScore()+1);
 
         //supprimer le fruit de la mémoire
         delete colliding_items.at(i);
