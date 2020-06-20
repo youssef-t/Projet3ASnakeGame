@@ -9,7 +9,7 @@
 extern Game* game;
 SnakeHead::SnakeHead()
 {
-    setRect(0,0,LONGUEUR_TETE,LONGUEUR_TETE);
+    setRect(1,1,LONGUEUR_TETE-2,LONGUEUR_TETE-2);
     //Définir la couleur de la tête et sa texture
     QBrush brush;
     brush.setStyle(Qt::SolidPattern);
@@ -56,6 +56,7 @@ void SnakeHead::keyPressEvent(QKeyEvent *event)
     //On teste alors s'il y a eu de collision au moment où on appuie
     //sur une touche
     bool aide_detection_collision = false;
+    bool aide_detection_collision_go = false;
     if(verify_position() && m_direction != "NULL"){
         m_prev_pos = pos();
         if(event->key() == Qt::Key_Right){
@@ -64,6 +65,7 @@ void SnakeHead::keyPressEvent(QKeyEvent *event)
                     setPos(x() + LONGUEUR_TETE, y());
                     aide_detection_collision = collisionImplement(CYCLE_FRUIT);
                     moveBody(aide_detection_collision);
+                    collideSnake();
                     m_direction = "RIGHT";
                     }
                 }
@@ -75,6 +77,7 @@ void SnakeHead::keyPressEvent(QKeyEvent *event)
                         setPos(x() - LONGUEUR_TETE, y());
                         aide_detection_collision = collisionImplement(CYCLE_FRUIT);
                         moveBody(aide_detection_collision);
+                        collideSnake();
                         m_direction = "LEFT";
                     }
             }
@@ -85,6 +88,7 @@ void SnakeHead::keyPressEvent(QKeyEvent *event)
                         setPos(x(), y() - LONGUEUR_TETE);
                         aide_detection_collision = collisionImplement(CYCLE_FRUIT);
                         moveBody(aide_detection_collision);
+                        collideSnake();
                         m_direction = "UP";
                     }
                 }
@@ -95,6 +99,7 @@ void SnakeHead::keyPressEvent(QKeyEvent *event)
                         setPos(x(), y() + LONGUEUR_TETE);
                         aide_detection_collision = collisionImplement(CYCLE_FRUIT);
                         moveBody(aide_detection_collision);
+                        collideSnake();
                         m_direction = "DOWN";
                     }
                   }
@@ -146,6 +151,21 @@ int SnakeHead::getY(){
     return this->y();
 }
 
+bool SnakeHead::collideSnake(){
+    QList<QGraphicsItem*> colliding_items_GO = collidingItems();
+    bool collision_detected_gameOver = false;
+    for(int i =0; i <colliding_items_GO.size() ; i++){
+        if(typeid(*colliding_items_GO[i]) == typeid(SnakeBody) ){
+            //qDebug() << "Touché mais pas dedans";
+            GameOver();
+            collision_detected_gameOver = true;
+            break;
+        }
+    }
+    return collision_detected_gameOver;
+}
+
+
 bool SnakeHead::collideFruit(){
    QList<QGraphicsItem*> colliding_items = collidingItems();
    bool collision_detected = false;
@@ -165,6 +185,10 @@ bool SnakeHead::collideFruit(){
    //s'il n'y a pas eu de collisions
    return collision_detected;
 }
+
+
+
+
 //afficher le fruit après "cycle" périodes
 bool SnakeHead::collisionImplement(int cycle){
     bool collision_detected_local = collideFruit();
@@ -188,6 +212,7 @@ void SnakeHead::move(){
     //faire bouger la tête suivant sa direction actuelle automatiquement
     //si le serpent n'est pas en pause
     bool collision_detected = false;
+    bool collision_detected_go = false;
     if(m_direction != "NULL"){
         correction_position();
         m_prev_pos = pos();
@@ -216,6 +241,7 @@ void SnakeHead::move(){
             aide_affichage_fruit = 0;
         }*/
         collision_detected = collisionImplement(CYCLE_FRUIT);
+        collideSnake();
         moveBody(collision_detected);
         collision_detected = false;
     }
@@ -245,4 +271,8 @@ bool SnakeHead::verify_position()
     return true;
 }
 
-
+void SnakeHead::GameOver()
+{
+    m_direction = "NULL";
+    game->GameOver();
+}

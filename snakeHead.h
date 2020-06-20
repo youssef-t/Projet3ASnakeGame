@@ -22,16 +22,22 @@ public:
     //augmenter la taille du serpent
     void elongateBody();
 
+    //GameOver
+
     //retourner les coordonnées de la tête
     int getX();
     int getY();
 
     //détection de collision
     bool collideFruit();
+    bool collideSnake();
     bool collisionImplement(int cycle);
+
+
 
 public slots:
     void move();
+    void GameOver();
 
 private:
     //int m_length_head;

@@ -3,15 +3,23 @@
 #include "constants.h"
 #include "fruit.h"
 #include "score.h"
+#include "button.h"
+#include <QPushButton>
 class Game : public QGraphicsView
 {
+    Q_OBJECT
 public:
     Game();
     Score *score;
-    void start();
     QGraphicsScene* getScene() const;
-    void gameOver();
+    void GameOver();
+    void displayMainMenu(QString title, QString play);
+    QGraphicsTextItem *titleText;
+    QGraphicsTextItem *titleTextGameOver;
 private:
     QGraphicsScene* m_scene;
     int m_score;
+
+public slots:
+    void start();
 };
