@@ -62,9 +62,10 @@ void Game::playAgain()
     for (int i = 0; i < all.size(); i++){
             QGraphicsItem *gi = all[i];
             m_scene->removeItem(gi);
+            //ne pas supprimer le score
             if(typeid (*gi) != typeid (Score))
-                delete gi; // warning at this line
-            qDebug()<<"removed "<< i ;
+                delete gi;
+            //qDebug()<<"removed "<< i ;
         }
     //ajout du serpent
     SnakeHead* snake_head = new SnakeHead();
