@@ -24,6 +24,7 @@ Fruit::Fruit()
     setPos(random_x, random_y);
     game->getScene()->addItem(this);
     qDebug() << "x: " << random_x << " , y: "<< random_y;
+    score=1;
 
     //m_score = 1;
 }

@@ -12,7 +12,8 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     game = new Game();
     game->show();
-    game->start();
+    //game->start();
+    game->displayMainMenu("Snake","Jouer");
 
     return a.exec();
 }
