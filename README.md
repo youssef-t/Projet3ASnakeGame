@@ -1,5 +1,6 @@
 # Projet3ASnakeGame
 
+
 Fonctionnalités réalisées:
      - Mouvement du serpent à l'aide du clavier
      - Touche espace : pause
@@ -14,3 +15,4 @@ Fonctionnalités réalisées:
 
 Fonctionnalités manquantes:
     
+
