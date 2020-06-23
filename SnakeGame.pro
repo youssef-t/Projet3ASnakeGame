@@ -16,15 +16,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    button.cpp \
     fruit.cpp \
     game.cpp \
     main.cpp \
+    score.cpp \
     snakebody.cpp \
     snakehead.cpp
 
 HEADERS += \
+    button.h \
+    constants.h \
     fruit.h \
     game.h \
+    score.h \
     snakebody.h \
     snakehead.h
 
@@ -32,3 +37,6 @@ HEADERS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    images.qrc
