@@ -15,8 +15,7 @@ class SnakeHead : public QObject, public QGraphicsRectItem{
 public:
     //constructeur pour créer la tête du serpent
     SnakeHead();
-    //destructeur
-    //~SnakeHead();
+
     //méthode pour controler la tête
     void keyPressEvent(QKeyEvent* event);
     //bouger les blocs qui composent le corps
